@@ -51,34 +51,8 @@ public class MainActivity extends ActionBarActivity {
     	this.date = date;
     	
     	//sendMail(cust, date);
-    	// TODO Auto-generated method stub
-		Mail mail = new Mail("franangthomas@gmail.com", "tranduil123");
-		String[] toArr = {"badeanda87@hotmail.com"}; 
-        mail.setTo(toArr); 
-        mail.setFrom("from_email"); 
-        mail.setSubject("Halla balla."); 
-        mail.setBody("Ipsum sorem. Sender mail fra appen vår!");
-        
-        emailList.add(mail);
-        Log.d("LOL", "lol");
-        ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connec != null && 
-            (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
-            (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)){ 
-                //You are connected, do something online.
-        	Toast.makeText(getApplicationContext(), "Email sendt!", Toast.LENGTH_SHORT).show();
-        	
-        	for (int i = 0; i < emailList.size(); i++) {
-				
-            	new SendEmailTask(emailList.get(i)).execute();
-			}
-        	
-        } else if (connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED ||
-                 connec.getNetworkInfo(1).getState() == NetworkInfo.State.DISCONNECTED ) {            
-                //Not connected.        
-                Toast.makeText(getApplicationContext(), "Ingen tilgang til internett.", Toast.LENGTH_LONG).show();
-        } 
-    	
+    	// TODO Auto-generated method stud
+    	prepareEmail();
     	//registrer jobb i database
     }
     
@@ -110,6 +84,37 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
     
+    public void prepareEmail(){
+    	
+
+    	Mail mail = new Mail("franangthomas@gmail.com", "tranduil123");
+		String[] toArr = {"badeanda87@hotmail.com"}; 
+        mail.setTo(toArr); 
+        mail.setFrom("from_email"); 
+        mail.setSubject("Halla balla."); 
+        mail.setBody("Ipsum sorem. Sender mail fra appen vår!");
+        
+        emailList.add(mail);
+        Log.d("LOL", "lol");
+        ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connec != null && 
+            (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
+            (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)){ 
+                //You are connected, do something online.
+        	Toast.makeText(getApplicationContext(), "Email sendt!", Toast.LENGTH_SHORT).show();
+        	
+        	for (int i = 0; i < emailList.size(); i++) {
+				
+            	new SendEmailTask(emailList.get(i)).execute();
+			}
+        	
+        } else if (connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED ||
+                 connec.getNetworkInfo(1).getState() == NetworkInfo.State.DISCONNECTED ) {            
+                //Not connected.        
+                Toast.makeText(getApplicationContext(), "Ingen tilgang til internett.", Toast.LENGTH_LONG).show();
+        } 
+    	
+    }
     
     //Class to make a background thread sending the email.
     class SendEmailTask extends AsyncTask<Void, Void, Void>{
