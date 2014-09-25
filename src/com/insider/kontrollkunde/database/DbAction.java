@@ -6,7 +6,8 @@ import android.util.Log;
 
 public class DbAction {
 	
-	public void connectDatabase(){
+	public Connection connectDatabase(){
+		Connection con=null;
 		try {
 			try {
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -16,7 +17,7 @@ public class DbAction {
 				Log.d("!!!", "class!!!!");
 			}
 			
-			Connection con = DriverManager.getConnection(
+			con = DriverManager.getConnection(
 					"jdbc:mysql://78.91.9.182:3306/insider",
 					"franang_admin",
 					"tranduil123");
@@ -25,5 +26,6 @@ public class DbAction {
 			e.printStackTrace();
 			Log.d("!!!", "Fail");
 		}
+		return con;
 	}
 }
