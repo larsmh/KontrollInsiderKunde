@@ -60,10 +60,8 @@ public class MainActivity extends ActionBarActivity {
         mail.setBody("Ipsum sorem. Sender mail fra appen vår!");
         
         emailList.add(mail);
-        
+        Log.d("LOL", "lol");
         ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-       
-        
         if (connec != null && 
             (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
             (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)){ 
