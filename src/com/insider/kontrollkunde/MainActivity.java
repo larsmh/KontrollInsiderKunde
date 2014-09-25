@@ -25,8 +25,6 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 	private AutoCompleteTextView custSelect;
-	public Customer cust;
-	public String date;
 	public ArrayList<Mail> emailList;
 	
 	@Override
@@ -35,7 +33,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         Globals.custList = new CustomerList();
         
-        
+        emailList = new ArrayList<Mail>();
         custSelect = (AutoCompleteTextView) findViewById(R.id.custselect);
         ArrayAdapter<Customer> adapter = new ArrayAdapter<Customer>(this, android.R.layout.simple_list_item_1, Globals.custList.getList());
         custSelect.setAdapter(adapter);
@@ -44,15 +42,11 @@ public class MainActivity extends ActionBarActivity {
     public void register(View view){
     	Customer cust = getCustomer(custSelect.getText().toString());
     	//Setting customer to global var.
-    	this.cust = cust;
     	Calendar c = Calendar.getInstance();
     	String date=c.get(Calendar.DATE)+"."+c.get(Calendar.MONTH)+"."+c.get(Calendar.YEAR)+" "
     			+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
-    	this.date = date;
-    	
     	//sendMail(cust, date);
-    	// TODO Auto-generated method stud
-    	prepareEmail();
+    	sendEmail(cust, date);
     	//registrer jobb i database
     }
     
@@ -84,7 +78,7 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
     
-    public void prepareEmail(){
+    public void sendEmail(Customer cust, String date ){
     	
 
     	Mail mail = new Mail("franangthomas@gmail.com", "tranduil123");
@@ -92,11 +86,10 @@ public class MainActivity extends ActionBarActivity {
         mail.setTo(toArr); 
         mail.setFrom("from_email"); 
         mail.setSubject("Halla balla."); 
-        mail.setBody("Ipsum sorem. Sender mail fra appen vår!");
+        mail.setBody("Ipsum sorem. Sender mail fra Kontroll Insider Kunde!.\n"+"Sendt: "+date);
         
         emailList.add(mail);
-        Log.d("LOL", "lol");
-        Log.d("lol","asd");
+        
         ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connec != null && 
             (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
