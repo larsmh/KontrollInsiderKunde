@@ -96,6 +96,7 @@ public class MainActivity extends ActionBarActivity {
         
         emailList.add(mail);
         Log.d("LOL", "lol");
+        Log.d("lol","asd");
         ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connec != null && 
             (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
