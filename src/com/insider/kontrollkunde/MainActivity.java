@@ -81,7 +81,7 @@ public class MainActivity extends ActionBarActivity {
     public void sendEmail(Customer cust, String date ){
     	
 
-    	Mail mail = new Mail("franangthomas@gmail.com", "tranduil123");
+    	Mail mail = new Mail("franangthomas@gmail.com", "pass");
 		String[] toArr = {"badeanda87@hotmail.com"}; 
         mail.setTo(toArr); 
         mail.setFrom("from_email"); 
