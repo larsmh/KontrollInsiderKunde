@@ -49,12 +49,7 @@ public class MainActivity extends ActionBarActivity {
     	String date=c.get(Calendar.DATE)+"."+c.get(Calendar.MONTH)+"."+c.get(Calendar.YEAR)+" "
     			+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
     	//sendMail(cust, date);
-<<<<<<< HEAD
-    	sendEmail(cust, date);
-=======
-    	// TODO Auto-generated method stud
-    	//prepareEmail();
->>>>>>> f5494f49c3eb592156b16ea4539195d8007b50e3
+
     	//registrer jobb i database
     }
     
