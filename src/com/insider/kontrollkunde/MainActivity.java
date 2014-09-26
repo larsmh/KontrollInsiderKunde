@@ -3,6 +3,7 @@ package com.insider.kontrollkunde;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.insider.kontrollkunde.database.DbAction;
 import com.insider.kontrollkunde.model.Customer;
 import com.insider.kontrollkunde.model.CustomerList;
 import com.insider.kontrollkunde.model.Globals;
@@ -40,13 +41,20 @@ public class MainActivity extends ActionBarActivity {
         
     }
     public void register(View view){
+    	DbAction db = new DbAction();
+    	db.connectDatabase();
     	Customer cust = getCustomer(custSelect.getText().toString());
     	//Setting customer to global var.
     	Calendar c = Calendar.getInstance();
     	String date=c.get(Calendar.DATE)+"."+c.get(Calendar.MONTH)+"."+c.get(Calendar.YEAR)+" "
     			+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
     	//sendMail(cust, date);
+<<<<<<< HEAD
     	sendEmail(cust, date);
+=======
+    	// TODO Auto-generated method stud
+    	//prepareEmail();
+>>>>>>> f5494f49c3eb592156b16ea4539195d8007b50e3
     	//registrer jobb i database
     }
     
