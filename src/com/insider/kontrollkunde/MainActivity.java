@@ -27,6 +27,7 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity {
 	private AutoCompleteTextView custSelect;
 	public ArrayList<Mail> emailList;
+	private DbAction db;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +42,16 @@ public class MainActivity extends ActionBarActivity {
         
     }
     public void register(View view){
-    	DbAction db = new DbAction();
+    	db = new DbAction();
     	db.connectDatabase();
-    	Customer cust = getCustomer(custSelect.getText().toString());
+    	/*Customer cust = getCustomer(custSelect.getText().toString());
     	//Setting customer to global var.
     	Calendar c = Calendar.getInstance();
     	String date=c.get(Calendar.DATE)+"."+c.get(Calendar.MONTH)+"."+c.get(Calendar.YEAR)+" "
     			+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
     	//sendMail(cust, date);
 
-    	//registrer jobb i database
+    	//registrer jobb i database*/
     }
     
     private Customer getCustomer(String name){
