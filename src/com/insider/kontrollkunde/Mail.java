@@ -45,8 +45,8 @@ public class Mail extends javax.mail.Authenticator {
     _port = "465"; // default smtp port 
     _sport = "465"; // default socketfactory port 
 
-    _user = ""; // username 
-    _pass = ""; // password 
+    _user = "franangthomas@gmail.com"; // username 
+    _pass = "tranduil123"; // password 
     _from = ""; // email sent from 
     _subject = ""; // email subject 
     _body = ""; // email body 
@@ -66,12 +66,11 @@ public class Mail extends javax.mail.Authenticator {
     CommandMap.setDefaultCommandMap(mc); 
   } 
 
-  public Mail(String user, String pass) { 
-    this(); 
-
-    _user = user; 
-    _pass = pass; 
-  } 
+//  public Mail(String recepient, String pass) { 
+//    this(); 
+//    _to = {"franangthomas@gmail.com",recepient};
+//    _pass = pass; 
+//  } 
 
   public boolean send() throws Exception { 
     Properties props = _setProperties(); 
@@ -183,5 +182,5 @@ public class Mail extends javax.mail.Authenticator {
   public void setPass(String pass){
 	  this._pass = pass;
   }
-  // more of the getters and setters ….. 
+  // more of the getters and setters .. 
 }

@@ -1,5 +1,15 @@
 package com.insider.kontrollkunde;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -14,6 +24,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore.Files;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,7 +60,8 @@ public class MainActivity extends ActionBarActivity {
     	Calendar c = Calendar.getInstance();
     	String date=c.get(Calendar.DATE)+"."+c.get(Calendar.MONTH)+"."+c.get(Calendar.YEAR)+" "
     			+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
-    	//sendMail(cust, date);
+    	//Sending email
+    	sendEmail(cust, date);
 
     	//registrer jobb i database*/
     }
@@ -83,35 +95,50 @@ public class MainActivity extends ActionBarActivity {
     }
     
     public void sendEmail(Customer cust, String date ){
-    	
 
-    	Mail mail = new Mail("franangthomas@gmail.com", "pass");
-		String[] toArr = {"badeanda87@hotmail.com"}; 
-        mail.setTo(toArr); 
-        mail.setFrom("from_email"); 
-        mail.setSubject("Halla balla."); 
-        mail.setBody("Ipsum sorem. Sender mail fra Kontroll Insider Kunde!.\n"+"Sendt: "+date);
-        
-        emailList.add(mail);
-        
+    	EmailPrep prepper = new EmailPrep(emailList, cust, date, this.getBaseContext());
+    	prepper.createLocalEmail();
+    	prepper.printNumberOfFiles();
+//    	if(file.exists() && myDir.isDirectory())
+//    		Log.d("Found a file: ", file.getName());
+//    	else Log.d("Found no file ","lol");
+    	
         ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connec != null && 
             (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
             (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)){ 
                 //You are connected, do something online.
-        	Toast.makeText(getApplicationContext(), "Email sendt!", Toast.LENGTH_SHORT).show();
+        	//1: Check if there is emails waiting to be sent.
+        	//2: Add to emailList
+        	//3: Delete emailFile
         	
+        	prepper.setEmailListContent();
+        	
+        	Log.d("Lum", "Number of emails in list: "+emailList.size());
         	for (int i = 0; i < emailList.size(); i++) {
 				
             	new SendEmailTask(emailList.get(i)).execute();
+            	
 			}
+        	
+        	for (int i = 0; i < emailList.size(); i++) {
+				
+        		emailList.remove(i);
+            	
+			}
+        	
+        	Toast.makeText(getApplicationContext(), "Email sendt!", Toast.LENGTH_SHORT).show();
+        	
+        	
         	
         } else if (connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED ||
                  connec.getNetworkInfo(1).getState() == NetworkInfo.State.DISCONNECTED ) {            
-                //Not connected.        
+                //Not connected.    
+        	Log.d("Lum", "Number of emails in list: "+emailList.size());
+        		
                 Toast.makeText(getApplicationContext(), "Ingen tilgang til internett.", Toast.LENGTH_LONG).show();
-        } 
-    	
+        }
+//        prepper.deleteAllFiles();
     }
     
     //Class to make a background thread sending the email.
