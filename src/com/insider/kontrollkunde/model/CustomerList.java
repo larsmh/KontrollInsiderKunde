@@ -16,7 +16,7 @@ public class CustomerList {
 	
 	private void getCustomers(){
 		db = new DbAction();
-    	db.connectDatabase();
+    	db.retrieveCustomers();
 		
 		/*Customer cust;
 		String names[] = {"Per", "Nils", "Ola"};

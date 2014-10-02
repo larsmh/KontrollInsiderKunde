@@ -1,33 +1,31 @@
 package com.insider.kontrollkunde.database;
 
+import android.util.Log;
+
+import com.insider.kontrollkunde.model.Globals;
+
 
 public class DbAction {
 	String url ="jdbc:mysql://mysql.stud.ntnu.no:3306/franang_insider";
 	String user = "franang_admin";
 	String pw = "tranduil123";
+	String query;
 	
-	public void connectDatabase(){
-		/*Connection con=null;
-		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.d("!!!", "class!!!!");
-		}
-		try {
-			Log.d("!!!", "Trying");
-			String url ="jdbc:mysql://mysql.stud.ntnu.no:3306/franang_insider";
-			String user = "franang_admin";
-			String pw = "tranduil123";
-			con = DriverManager.getConnection(url, user, pw);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.d("!!!", "Fail");
-		}*/
-			
-			String query = "select * from customer";
-			new DBThread().execute(url, user, pw, query);
+	public void retrieveCustomers(){	
+		query = "SELECT * FROM customer WHERE department='"+Globals.user.getDepartment()+"'";
+		new RetrieveCustomers().execute(url, user, pw, query);
 	}
+	
+	public void registerJob(String customer, String date){
+		query="INSERT INTO jobs(customer, employee, date) VALUES('"+customer+"', '"
+				+Globals.user.getDepartment()+"', '"+date+"')";
+		Log.d("!!!!", query);
+		new RegisterJob().execute(url, user, pw, query);
+	}
+	
+	public void retrieveUser(String phonenr){
+		query = "SELECT * FROM employee WHERE phonenr='"+phonenr+"'";
+		new RetrieveUser().execute(url, user, pw, query);
+	}
+	
 }

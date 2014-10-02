@@ -1,5 +1,6 @@
 package com.insider.kontrollkunde;
 
+import com.insider.kontrollkunde.database.DbAction;
 import com.insider.kontrollkunde.model.Globals;
 import com.insider.kontrollkunde.model.User;
 
@@ -18,6 +19,7 @@ import android.widget.Spinner;
 public class LoginActivity extends ActionBarActivity {
 	private Spinner dept;
 	private EditText phonenr;
+	private DbAction db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +44,34 @@ public class LoginActivity extends ActionBarActivity {
 		String phoneInput=phonenr.getText().toString();
 		String deptInput=dept.getSelectedItem().toString();
 		Log.d("!!!!", phoneInput+" "+deptInput);
-		//if(detailsExists(phoneInput, deptInput)){
+		if(userExists(phoneInput)){
+			Globals.userFound=false;
 			SharedPreferences userData = getSharedPreferences("UserFile", 0);
 			SharedPreferences.Editor editor = userData.edit();
 			editor.putString("phonenr", phoneInput);
 			editor.putString("dept", deptInput);
 			editor.commit();
 			nextActivity(phoneInput, deptInput);
-		//}
+		}
+		else{
+			Log.d("!!!", "user not found");
+		}
 	}
 	private void nextActivity(String phonenr, String dept){
 		Globals.user = new User(phonenr, dept);
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
+	}
+	private boolean userExists(String phonenr){
+		db = new DbAction();
+		db.retrieveUser(phonenr);
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Globals.userFound;
 	}
 
 	@Override
@@ -74,5 +91,8 @@ public class LoginActivity extends ActionBarActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	@Override
+	public void onBackPressed() {
 	}
 }

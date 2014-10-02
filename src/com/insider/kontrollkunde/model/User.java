@@ -7,4 +7,11 @@ public class User {
 		this.phonenr=phonenr;
 		this.department=department;
 	}
+	public String getPhonenr() {
+		return phonenr;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
 }

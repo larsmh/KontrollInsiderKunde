@@ -17,9 +17,13 @@ import com.insider.kontrollkunde.database.DbAction;
 import com.insider.kontrollkunde.model.Customer;
 import com.insider.kontrollkunde.model.CustomerList;
 import com.insider.kontrollkunde.model.Globals;
+import com.insider.kontrollkunde.model.User;
 
 import android.support.v7.app.ActionBarActivity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -38,7 +42,7 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity {
 	private AutoCompleteTextView custSelect;
 	public ArrayList<Mail> emailList;
-	private DbAction db;
+	DbAction db;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +57,20 @@ public class MainActivity extends ActionBarActivity {
         
     }
     public void register(View view){
-    	db = new DbAction();
-    	db.connectDatabase();
-    	/*Customer cust = getCustomer(custSelect.getText().toString());
+    	Customer cust = getCustomer(custSelect.getText().toString());
+    	if(cust==null){
+    		return;
+    	}
     	//Setting customer to global var.
     	Calendar c = Calendar.getInstance();
-    	String date=c.get(Calendar.DATE)+"."+c.get(Calendar.MONTH)+"."+c.get(Calendar.YEAR)+" "
+    	String date=c.get(Calendar.DATE)+"."+(c.get(Calendar.MONTH)+1)+"."+c.get(Calendar.YEAR)+" "
     			+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
     	//Sending email
-    	sendEmail(cust, date);
+    	//sendEmail(cust, date);
 
-    	//registrer jobb i database*/
+    	//registrer jobb i database
+    	db = new DbAction();
+    	db.registerJob(cust.getName(), date);
     }
     
     private Customer getCustomer(String name){
@@ -88,10 +95,22 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_log_out) {
+        	SharedPreferences userData = getSharedPreferences("UserFile", 0);
+			SharedPreferences.Editor editor = userData.edit();
+			editor.putString("phonenr", "null");
+			editor.putString("dept", "null");
+			editor.commit();
+			
+			Globals.user = null;
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onBackPressed() {
     }
     
     public void sendEmail(Customer cust, String date ){
