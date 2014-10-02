@@ -9,7 +9,7 @@
 	<classpathentry exported="true" kind="lib" path="/android-support-v7-appcompat/bin/android-support-v7-appcompat.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry exported="true" kind="src" path="/android-support-v7-appcompat"/>
+	<classpathentry kind="src" path="/android-support-v7-appcompat"/>
 	<classpathentry exported="true" kind="lib" path="libs/mysql-connector-java-5.1.33-bin.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
