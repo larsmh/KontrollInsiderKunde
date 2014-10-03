@@ -31,8 +31,8 @@ public class EmailPrep {
 	
 	public void createLocalEmail(){
 
-//    	String email = cust.getEmail();
-    	String email = "badeanda87@hotmail.com";
+		String email = cust.getEmail();
+//    	String email = "badeanda87@hotmail.com";
 //    	String name = cust.getName();
     	String name = "thomas";
     	File file;    	
@@ -51,7 +51,7 @@ public class EmailPrep {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
 			
-			writer.write("badeanda87@hotmail.com");
+			writer.write(email);
 			writer.newLine();
 			writer.write(date);
 			writer.close();

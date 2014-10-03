@@ -33,6 +33,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -48,14 +49,24 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Globals.custList = new CustomerList();
+        updateList();
         
         emailList = new ArrayList<Mail>();
         custSelect = (AutoCompleteTextView) findViewById(R.id.custselect);
-        ArrayAdapter<Customer> adapter = new ArrayAdapter<Customer>(this, android.R.layout.simple_list_item_1, Globals.custList.getList());
-        custSelect.setAdapter(adapter);
+        final ActionBarActivity a = this;
         
+        custSelect.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(Globals.custList!=null){
+				ArrayAdapter<Customer> adapter = new ArrayAdapter<Customer>(a, android.R.layout.simple_list_item_1, Globals.custList.getList());
+				custSelect.setAdapter(adapter);
+				}				
+			}
+        });    
     }
+	
     public void register(View view){
     	Customer cust = getCustomer(custSelect.getText().toString());
     	if(cust==null){
@@ -66,11 +77,19 @@ public class MainActivity extends ActionBarActivity {
     	String date=c.get(Calendar.DATE)+"."+(c.get(Calendar.MONTH)+1)+"."+c.get(Calendar.YEAR)+" "
     			+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
     	//Sending email
-    	//sendEmail(cust, date);
+    	sendEmail(cust, date);
 
     	//registrer jobb i database
     	db = new DbAction();
     	db.registerJob(cust.getName(), date);
+    }
+    private void updateList(){
+    	ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+    	if (connec != null && 
+                (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
+                (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)){
+    		Globals.custList = new CustomerList();
+    	}
     }
     
     private Customer getCustomer(String name){
@@ -111,6 +130,12 @@ public class MainActivity extends ActionBarActivity {
     }
     @Override
     public void onBackPressed() {
+    	moveTaskToBack(true);
+    }
+    
+    protected void onResume (){
+    	super.onResume();
+    	updateList();
     }
     
     public void sendEmail(Customer cust, String date ){
