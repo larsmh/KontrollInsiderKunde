@@ -161,7 +161,6 @@ public class MainActivity extends ActionBarActivity {
                  (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
                  (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)){ 
              	
-            	 	Toast.makeText(context, "YAY", Toast.LENGTH_SHORT).show();
             	 	prepper.setEmailListContent();
              	
             	 	new SendEmailTask().execute();
