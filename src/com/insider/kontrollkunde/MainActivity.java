@@ -21,8 +21,10 @@ import com.insider.kontrollkunde.model.User;
 
 import android.support.v7.app.ActionBarActivity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -43,6 +45,9 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity {
 	private AutoCompleteTextView custSelect;
 	public ArrayList<Mail> emailList;
+	EmailPrep prepper;
+	Customer cust;
+	String date;
 	DbAction db;
 	
 	@Override
@@ -53,6 +58,11 @@ public class MainActivity extends ActionBarActivity {
         
         emailList = new ArrayList<Mail>();
         custSelect = (AutoCompleteTextView) findViewById(R.id.custselect);
+        
+        IntentFilter filter = new IntentFilter(Intent.ACTION_DEFAULT);
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        this.registerReceiver(this.receiver, filter);  
+        
         final ActionBarActivity a = this;
         
         custSelect.setOnClickListener(new OnClickListener(){
@@ -68,13 +78,13 @@ public class MainActivity extends ActionBarActivity {
     }
 	
     public void register(View view){
-    	Customer cust = getCustomer(custSelect.getText().toString());
+    	cust = getCustomer(custSelect.getText().toString());
     	if(cust==null){
     		return;
     	}
     	//Setting customer to global var.
     	Calendar c = Calendar.getInstance();
-    	String date=c.get(Calendar.DATE)+"."+(c.get(Calendar.MONTH)+1)+"."+c.get(Calendar.YEAR)+" "
+    	date=c.get(Calendar.DATE)+"."+(c.get(Calendar.MONTH)+1)+"."+c.get(Calendar.YEAR)+" "
     			+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
     	//Sending email
     	sendEmail(cust, date);
@@ -83,6 +93,9 @@ public class MainActivity extends ActionBarActivity {
     	db = new DbAction();
     	db.registerJob(cust.getName(), date);
     }
+    
+    
+    
     private void updateList(){
     	ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
     	if (connec != null && 
@@ -138,39 +151,50 @@ public class MainActivity extends ActionBarActivity {
     	updateList();
     }
     
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) { 
+        	
+        	 EmailPrep prepper = new EmailPrep(emailList, cust, date, context);
+        	 ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+             if (connec != null && 
+                 (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
+                 (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)){ 
+             	
+            	 	Toast.makeText(context, "YAY", Toast.LENGTH_SHORT).show();
+            	 	prepper.setEmailListContent();
+             	
+            	 	new SendEmailTask().execute();
+                
+            	if(emailList.size() > 0)
+            		Toast.makeText(getApplicationContext(), "Email sendt!", Toast.LENGTH_SHORT).show();
+            	
+             	
+             }
+        	
+        	
+        }
+      }; 
+    
+    
     public void sendEmail(Customer cust, String date ){
 
     	EmailPrep prepper = new EmailPrep(emailList, cust, date, this.getBaseContext());
     	prepper.createLocalEmail();
     	prepper.printNumberOfFiles();
-//    	if(file.exists() && myDir.isDirectory())
-//    		Log.d("Found a file: ", file.getName());
-//    	else Log.d("Found no file ","lol");
+
     	
         ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connec != null && 
             (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
             (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)){ 
-                //You are connected, do something online.
-        	//1: Check if there is emails waiting to be sent.
-        	//2: Add to emailList
-        	//3: Delete emailFile
         	
         	prepper.setEmailListContent();
         	
         	Log.d("Lum", "Number of emails in list: "+emailList.size());
-        	for (int i = 0; i < emailList.size(); i++) {
 				
-            	new SendEmailTask(emailList.get(i)).execute();
-            	
-			}
-        	
-        	for (int i = 0; i < emailList.size(); i++) {
-				
-        		emailList.remove(i);
-            	
-			}
-        	
+        	new SendEmailTask().execute();
+            
         	Toast.makeText(getApplicationContext(), "Email sendt!", Toast.LENGTH_SHORT).show();
         	
         	
@@ -187,18 +211,24 @@ public class MainActivity extends ActionBarActivity {
     
     //Class to make a background thread sending the email.
     class SendEmailTask extends AsyncTask<Void, Void, Void>{
-    	Mail mail;
-    	public SendEmailTask(Mail mail) {
-			// TODO Auto-generated constructor stub
-    		this.mail = mail;
-		}
     	
 		@Override
 		protected Void doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 		
 			try {
-				mail.send();
+				for (int i = 0; i < emailList.size(); i++) {
+					
+	            	emailList.get(i).send();
+	            	
+				}
+	        	
+	        	for (int i = 0; i < emailList.size(); i++) {
+					
+	        		emailList.remove(i);
+	            	
+				}
+				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
