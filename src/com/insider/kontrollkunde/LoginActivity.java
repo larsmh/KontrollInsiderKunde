@@ -26,8 +26,11 @@ public class LoginActivity extends ActionBarActivity {
 		SharedPreferences userData = getSharedPreferences("UserFile", 0);
 		String phoneData = userData.getString("phonenr", "null");
 		String deptData = userData.getString("dept", "null");
-		if(!phoneData.equals("null") && !deptData.equals("null"))
-			nextActivity(phoneData, deptData);
+		boolean adminData = userData.getBoolean("admin", false);
+		if(!phoneData.equals("null") && !deptData.equals("null")){
+			Globals.user = new User(phoneData, deptData, adminData);
+			nextActivity();
+		}
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
@@ -46,19 +49,21 @@ public class LoginActivity extends ActionBarActivity {
 		Log.d("!!!!", phoneInput+" "+deptInput);
 		if(userExists(phoneInput)){
 			Globals.userFound=false;
+			Globals.user.setDepartment(deptInput);
 			SharedPreferences userData = getSharedPreferences("UserFile", 0);
 			SharedPreferences.Editor editor = userData.edit();
-			editor.putString("phonenr", phoneInput);
-			editor.putString("dept", deptInput);
+			editor.putString("phonenr", Globals.user.getPhonenr());
+			editor.putString("dept", Globals.user.getDepartment());
+			editor.putBoolean("admin", Globals.user.getAdmin());
 			editor.commit();
-			nextActivity(phoneInput, deptInput);
+			nextActivity();
 		}
 		else{
 			Log.d("!!!", "user not found");
 		}
 	}
-	private void nextActivity(String phonenr, String dept){
-		Globals.user = new User(phonenr, dept);
+	private void nextActivity(){
+		//Globals.user = new User(phonenr, dept);
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 	}

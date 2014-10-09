@@ -1,15 +1,5 @@
 package com.insider.kontrollkunde;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -17,10 +7,8 @@ import com.insider.kontrollkunde.database.DbAction;
 import com.insider.kontrollkunde.model.Customer;
 import com.insider.kontrollkunde.model.CustomerList;
 import com.insider.kontrollkunde.model.Globals;
-import com.insider.kontrollkunde.model.User;
 
 import android.support.v7.app.ActionBarActivity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,12 +18,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore.Files;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -54,7 +44,6 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        updateList();
         
         emailList = new ArrayList<Mail>();
         custSelect = (AutoCompleteTextView) findViewById(R.id.custselect);
@@ -68,13 +57,26 @@ public class MainActivity extends ActionBarActivity {
         custSelect.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				if(Globals.custList!=null){
-				ArrayAdapter<Customer> adapter = new ArrayAdapter<Customer>(a, android.R.layout.simple_list_item_1, Globals.custList.getList());
+				ArrayAdapter<Customer> adapter = new ArrayAdapter<Customer>(a, android.R.layout.simple_list_item_single_choice, Globals.custList.getList());
 				custSelect.setAdapter(adapter);
 				}				
 			}
-        });    
+        });
+        custSelect.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Log.d("!!!!", "item clicked");
+				InputMethodManager imm =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+	            imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+			}
+		});
+        
+        Button qualityButton = (Button)findViewById(R.id.qualitybutton);
+        if(Globals.user.getAdmin()==true){
+        	qualityButton.setVisibility(View.VISIBLE);
+        }
     }
 	
     public void register(View view){
@@ -132,6 +134,7 @@ public class MainActivity extends ActionBarActivity {
 			SharedPreferences.Editor editor = userData.edit();
 			editor.putString("phonenr", "null");
 			editor.putString("dept", "null");
+			editor.putBoolean("admin", false);
 			editor.commit();
 			
 			Globals.user = null;

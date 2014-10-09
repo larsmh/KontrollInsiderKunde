@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/custlabel"
         android:layout_centerHorizontal="true"
-        android:ems="10" >
+        android:ems="10" 
+        android:singleLine="true"
+        android:textColor="@color/red">
 
         <requestFocus />
     </AutoCompleteTextView>
@@ -25,18 +27,31 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/custselect"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="31dp"
         android:text="Velg kunde:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/regbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
         android:layout_below="@+id/custselect"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="89dp"
+        android:layout_marginTop="87dp"
         android:onClick="register"
-        android:text="Registrer vask" />
+        android:text="Registrer vask"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/qualitybutton"
+        android:layout_width="wrap_content"
+        android:layout_height="65dp"
+        android:layout_alignLeft="@+id/regbutton"
+        android:layout_alignRight="@+id/regbutton"
+        android:layout_below="@+id/regbutton"
+        android:layout_marginTop="60dp"
+        android:text="Kvalitetsrapport"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.insider.kontrollkunde.model.Globals;
+import com.insider.kontrollkunde.model.User;
 
 import android.os.AsyncTask;
 
@@ -32,6 +33,7 @@ public class RetrieveUser extends AsyncTask<String, Integer, Long> {
 	        rs = stmt.executeQuery(params[3]);
 	        while (rs.next()) {
 	        	Globals.userFound=true;
+	        	Globals.user = new User(rs.getString("phonenr"),rs.getBoolean("admin"));
 	        }
 	        con.close();
 	    }catch(SQLException e){

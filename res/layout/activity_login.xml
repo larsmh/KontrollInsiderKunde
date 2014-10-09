@@ -15,6 +15,7 @@
         android:layout_above="@+id/dept"
         android:layout_alignLeft="@+id/dept"
         android:text="Avdeling:"
+        android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -25,6 +26,7 @@
         android:layout_alignLeft="@+id/phonenr"
         android:layout_marginBottom="42dp"
         android:text="Telefonnummer:"
+        android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Spinner
@@ -47,12 +49,13 @@
 
     <Button
         android:id="@+id/loginbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
         android:layout_below="@+id/phonenrlabel"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
+        android:onClick="loggin"
         android:text="Logg inn"
-        android:onClick="loggin" />
+        android:textStyle="bold" />
 
 </RelativeLayout>
