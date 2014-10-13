@@ -7,7 +7,6 @@
     -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
         
-        <item name="android:background">@color/grey2</item>
         <item name="android:textSize">@dimen/text_size</item>
         <!-- API 14 theme customizations can go here. -->
     </style>

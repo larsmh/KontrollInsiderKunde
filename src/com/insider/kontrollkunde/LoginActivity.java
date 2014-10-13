@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class LoginActivity extends ActionBarActivity {
 	private Spinner dept;
@@ -59,7 +60,9 @@ public class LoginActivity extends ActionBarActivity {
 			nextActivity();
 		}
 		else{
-			Log.d("!!!", "user not found");
+			Toast.makeText(getApplicationContext(), 
+				"Kan ikke finne denne brukeren. Telefonnummeret kan være feil, eller nettilgangen dårlig",
+     			Toast.LENGTH_LONG).show();
 		}
 	}
 	private void nextActivity(){
