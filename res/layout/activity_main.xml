@@ -63,18 +63,18 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/msgText"
         android:onClick="register"
-        android:text="Registrer vask"
+        android:text="@+string/regvask"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/messagebutton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/custselect"
-        android:text="Melding"
-        android:textSize="12sp" 
-        android:onClick="showMessage"/>
+        android:onClick="showMessage"
+        android:text="@+string/message"
+        android:textSize="12sp" />
 
 </RelativeLayout>

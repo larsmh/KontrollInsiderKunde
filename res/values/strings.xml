@@ -2,12 +2,15 @@
 <resources>
 
     <string name="app_name">Kontroll Insider Kunde</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_log_out">Logg ut</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="yes">Ja</string>
     <string name="no">Nei</string>
+    <string name="regvask">Registrer vask</string>
+    <string name="sendMsg">Send melding</string>
+    <string name="abort">Avbryt</string>
+    <string name="message">Melding</string>
     
     <color name="red">#F05149</color>
     <color name="grey">#D1D1D1</color>

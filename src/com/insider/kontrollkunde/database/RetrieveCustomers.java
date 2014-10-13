@@ -9,7 +9,7 @@ import com.insider.kontrollkunde.model.Globals;
 import android.os.AsyncTask;
 
 public class RetrieveCustomers extends AsyncTask<String, Integer, Long> {
-
+	
 	@Override
 	protected Long doInBackground(String... params) {
 		Connection con=null;
@@ -27,10 +27,12 @@ public class RetrieveCustomers extends AsyncTask<String, Integer, Long> {
 		
 	        stmt = con.createStatement();
 	        rs = stmt.executeQuery(params[3]);
+	        Globals.custDB.clear();
 	        while (rs.next()) {
 	        	String name = rs.getString("name");
 	        	String email = rs.getString("email");
 	        	String dept = rs.getString("department");
+	        	Globals.custDB.insert(name, email, dept);
 	        	Globals.custList.insert(name, email, dept);
 	        }
 	        con.close();

@@ -3,6 +3,7 @@ package com.insider.kontrollkunde;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.insider.kontrollkunde.database.CustomerListDB;
 import com.insider.kontrollkunde.database.DbAction;
 import com.insider.kontrollkunde.model.Customer;
 import com.insider.kontrollkunde.model.CustomerList;
@@ -40,16 +41,17 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity {
 	private AutoCompleteTextView custSelect;
 	private EditText msgText;
-	private Button regButton;
+	private Button regButton, msgButton;
 	public ArrayList<Mail> emailList;
 	EmailPrep prepper;
 	Customer cust;
 	private String date;
 	DbAction db;
-	//private boolean msgDisplayed=false;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Globals.custDB = new CustomerListDB(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
@@ -75,7 +77,6 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Log.d("!!!!", "item clicked");
 				InputMethodManager imm =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 	            imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
 			}
@@ -98,19 +99,31 @@ public class MainActivity extends ActionBarActivity {
         
         msgText = (EditText)findViewById(R.id.msgText);
         regButton = (Button)findViewById(R.id.regbutton);
+        msgButton = (Button)findViewById(R.id.messagebutton);
         
     }
 	public void showMessage(View view){
 		if(msgText.isShown()){
-			msgText.setVisibility(View.INVISIBLE);
-			regButton.setText("Registerer vask");
-			//msgDisplayed=false;
+			setMsgInvisible();
 		}
 		else{
-			msgText.setVisibility(View.VISIBLE);
-			regButton.setText("Send melding");
-			//msgDisplayed=true;
+			setMsgVisible();
 		}
+	}
+	private void setMsgVisible(){
+		msgText.setVisibility(View.VISIBLE);
+		regButton.setText(R.string.sendMsg);
+		msgButton.setText(R.string.abort);
+		msgText.requestFocus();
+		InputMethodManager imm =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, 0);
+	}
+	private void setMsgInvisible(){
+		msgText.setVisibility(View.INVISIBLE);
+		regButton.setText(R.string.regvask);
+		msgButton.setText(R.string.message);
+		InputMethodManager imm =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
 	}
 	
 	
@@ -130,22 +143,30 @@ public class MainActivity extends ActionBarActivity {
     	String msg="";
     	if(msgText.isShown())
     		msg=msgText.getText().toString();
-    	sendEmail(cust, date, msg);
-    	msgText.setText("");
-
-    	//registrer jobb i database
+    	else{
     	db = new DbAction();
     	db.registerJob(cust.getName(), date);
+    	}
+    	sendEmail(cust, date, msg);
+    	msgText.setText("");
+    	setMsgInvisible();
+    	custSelect.setText("");
+
     }
     
     
     
     private void updateList(){
+    	Globals.custList = new CustomerList();
     	ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
     	if (connec != null && 
                 (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
                 (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)){
-    		Globals.custList = new CustomerList();
+    		db = new DbAction();
+    		db.retrieveCustomers();
+    	}
+    	else{
+    		Globals.custDB.getData();
     	}
     }
     
