@@ -45,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
 	public ArrayList<Mail> emailList;
 	EmailPrep prepper;
 	Customer cust;
-	private String date;
+	private String date, msg;
 	DbAction db;
 	
 	@Override
@@ -141,12 +141,15 @@ public class MainActivity extends ActionBarActivity {
     			+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
     	//Sending email
     	String msg="";
-    	if(msgText.isShown())
+    	if(msgText.isShown()){
     		msg=msgText.getText().toString();
+    		
+    		}
     	else{
     	db = new DbAction();
     	db.registerJob(cust.getName(), date);
     	}
+    	
     	sendEmail(cust, date, msg);
     	msgText.setText("");
     	setMsgInvisible();
@@ -237,7 +240,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void onReceive(Context context, Intent intent) { 
         	
-        	 EmailPrep prepper = new EmailPrep(emailList, cust, date, context);
+        	 EmailPrep prepper = new EmailPrep(emailList, cust, date, context, msg);
         	 ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
              if (connec != null && 
                  (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
@@ -259,8 +262,9 @@ public class MainActivity extends ActionBarActivity {
     
     
     public void sendEmail(Customer cust, String date, String msg ){
-
-    	EmailPrep prepper = new EmailPrep(emailList, cust, date, this.getBaseContext());
+    	Log.d("!!inne i sendEmail",msg);
+    	
+    	EmailPrep prepper = new EmailPrep(emailList, cust, date, this.getBaseContext(), msg);
     	prepper.createLocalEmail();
     	prepper.printNumberOfFiles();
 

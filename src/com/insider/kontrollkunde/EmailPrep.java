@@ -17,28 +17,34 @@ import com.insider.kontrollkunde.model.Customer;
 public class EmailPrep {
 
 	ArrayList<Mail> list;
-	String date;
+	String date, msg;
 	Customer cust;
 	Context context;
 	File myDir;
+	
 	public EmailPrep(ArrayList<Mail> list, Customer cust, String date, Context context) {
+	}
+	
+	public EmailPrep(ArrayList<Mail> list, Customer cust, String date, Context context, String msg) {
 		this.list = list;
 		this.date = date;
 		this.cust = cust;
 		this.context = context;
+		this.msg = msg;
 		myDir = context.getDir("myDir", Context.MODE_PRIVATE);
+		Log.d("!!emailPrep", ""+msg);
 	}
 	
 	public void createLocalEmail(){
 
 		String email = cust.getEmail();
 //    	String email = "badeanda87@hotmail.com";
-//    	String name = cust.getName();
-    	String name = "thomas";
+    	String name = cust.getName();
+    	String[] s = {email, date, msg};
+//    	String name = "thomas";
     	File file;    	
 		
-    	Log.d("Found: ",""+myDir.list().length);
-		
+    	Log.d("!!inne i CreateLocalEamil", "lol "+msg+" "+s[0]+" "+s[1]+" "+s[2]);
 		file = new File(myDir.getAbsolutePath(),name+myDir.list().length+".txt");
 		//Create a new file.
 		try {
@@ -48,42 +54,40 @@ public class EmailPrep {
 			e.printStackTrace();
 		}
 		//write to the file.
+		BufferedWriter writer;
+		
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
+			writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
 			
-			writer.write(email);
-			writer.newLine();
-			writer.write(date);
+				
+				writer.write(s[0]);
+				writer.newLine();
+				writer.write(s[1]);
+				writer.newLine();
+				writer.write(s[2]);
+				writer.newLine();
+			
+			writer.flush();
 			writer.close();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		//read the file.
-		
-//		Log.d("Found this details: ",checkemail+" ,"+checkdate);
-//		if(file.exists() && myDir.isDirectory()) Log.d("Found:", "Got file: "+file.getName());
-		
-//		for(File f: myDir.listFiles()) 
-//			  Log.d("Found: ", f.getName());
-		
-		
-//		if(myDir.list().length == 0) Log.d("Found no file ", myDir.getAbsolutePath());
-
 	}
 	
 	public void setEmailListContent(){
-		String lines[] = {"",""};
+		String lines[] = {"","",""};
 		String line;
+		
+		if( myDir.list().length != 0){
 		for(File f: myDir.listFiles()) {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(f.getAbsolutePath()));
 				try {
-					for (int j = 0; j < 2; j++) {
+					for (int j = 0; j < 3; j++) {
 						lines[j] = br.readLine();
+						Log.d("!!", lines[j]);
 					}
 					
 				} catch (IOException e) {
@@ -96,18 +100,30 @@ public class EmailPrep {
 				e.printStackTrace();
 			}
 			
+//			Log.d("!!checkckck", "lol "+msg+" "+lines[0]+" "+lines[1]+" "+lines[2]);
+			
 			Mail mail = new Mail();
 			String[] toArr = {lines[0]}; 
             mail.setTo(toArr); 
             mail.setFrom("franangthomas@gmail.com"); 
-            mail.setSubject("Stoooor til?"); 
-            mail.setBody("Savner deg!\n"+
+            if(msg != ""){
+            	Log.d("!!checkckck", "lol "+msg+" "+lines[0]+" "+lines[1]+" "+lines[2]);
+            	mail.setSubject("Vask ikke mulig på grunn av avvik");
+            	mail.setBody(lines[2]+"\n"+
             			"Denne mailen ble sent: "+lines[1]+"\n"+
             			"Dette er mail number: "+f.getName()); 		
+				
+            }
+            else {mail.setSubject("Kvittering for utført vask"); 
+            	mail.setBody("Vask utført av Kjekken Kjakansen\n"+
+            			"Denne mailen ble sent: "+lines[1]+"\n"+
+            			"Dette er mail number: "+f.getName());
+            }
 					
 			list.add(mail);
 			f.delete();
 		}
+	}
 	}
 	
 	public ArrayList<Mail> getEmailList(){

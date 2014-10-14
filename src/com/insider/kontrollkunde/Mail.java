@@ -66,11 +66,7 @@ public class Mail extends javax.mail.Authenticator {
     CommandMap.setDefaultCommandMap(mc); 
   } 
 
-//  public Mail(String recepient, String pass) { 
-//    this(); 
-//    _to = {"franangthomas@gmail.com",recepient};
-//    _pass = pass; 
-//  } 
+
 
   public boolean send() throws Exception { 
     Properties props = _setProperties(); 
