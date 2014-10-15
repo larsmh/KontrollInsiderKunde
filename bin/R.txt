@@ -261,8 +261,6 @@ int id collapseActionView 0x7f05000d
 int id custlabel 0x7f050042
 int id custselect 0x7f050041
 int id default_activity_button 0x7f050028
-int id dept 0x7f05003d
-int id deptlabel 0x7f05003c
 int id dialog 0x7f05000e
 int id disableHome 0x7f050008
 int id dropdown 0x7f05000f
@@ -284,8 +282,10 @@ int id msgText 0x7f050045
 int id never 0x7f050009
 int id none 0x7f050010
 int id normal 0x7f050000
-int id phonenr 0x7f05003f
-int id phonenrlabel 0x7f05003e
+int id password 0x7f05003f
+int id passwordlabel 0x7f05003e
+int id phonenr 0x7f05003c
+int id phonenrlabel 0x7f05003d
 int id progress_circular 0x7f050018
 int id progress_horizontal 0x7f050019
 int id qualitybutton 0x7f050043

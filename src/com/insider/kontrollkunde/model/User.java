@@ -1,11 +1,12 @@
 package com.insider.kontrollkunde.model;
 
 public class User {
-	private String phonenr, department;
+	private String phonenr, department, password;
 	private boolean admin;
 	
-	public User(String phonenr, String department, boolean admin){
+	public User(String phonenr, String password, String department, boolean admin){
 		this.phonenr=phonenr;
+		this.password=password;
 		this.department=department;
 		this.admin=admin;
 	}
@@ -16,6 +17,9 @@ public class User {
 	}
 	public String getPhonenr() {
 		return phonenr;
+	}
+	public String getPassword(){
+		return password;
 	}
 
 	public String getDepartment() {

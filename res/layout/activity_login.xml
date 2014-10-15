@@ -9,52 +9,54 @@
     android:background="@color/grey2"
     tools:context="com.insider.kontrollkunde.LoginActivity" >
 
-    <TextView
-        android:id="@+id/deptlabel"
+    <EditText
+        android:id="@+id/phonenr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/dept"
-        android:layout_alignLeft="@+id/dept"
-        android:text="Avdeling:"
-        android:textStyle="bold"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/phonenrlabel"
+        android:ems="10"
+        android:inputType="phone" />
+
+    <TextView
+        android:id="@+id/passwordlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/phonenr"
+        android:layout_marginTop="20dp"
+        android:text="Passord:"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/passwordlabel"
+        android:ems="10"
+        android:inputType="textPassword" />
 
     <TextView
         android:id="@+id/phonenrlabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/phonenr"
         android:layout_alignLeft="@+id/phonenr"
-        android:layout_marginBottom="42dp"
-        android:text="Telefonnummer:"
-        android:textStyle="bold"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Spinner
-        android:id="@+id/dept"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/phonenrlabel"
-        android:layout_alignLeft="@+id/phonenrlabel"
-        android:layout_marginBottom="16dp" />
-
-    <EditText
-        android:id="@+id/phonenr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="158dp"
-        android:ems="10"
-        android:inputType="phone" />
+        android:text="Telefonnummer:"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/loginbutton"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:layout_below="@+id/phonenrlabel"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
+        android:layout_alignLeft="@+id/password"
+        android:layout_below="@+id/password"
+        android:layout_marginTop="25dp"
         android:onClick="loggin"
         android:text="Logg inn"
         android:textStyle="bold" />

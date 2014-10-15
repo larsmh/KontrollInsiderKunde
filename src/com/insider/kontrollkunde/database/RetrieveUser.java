@@ -33,7 +33,7 @@ public class RetrieveUser extends AsyncTask<String, Integer, Long> {
 	        rs = stmt.executeQuery(params[3]);
 	        while (rs.next()) {
 	        	Globals.userFound=true;
-	        	Globals.user = new User(rs.getString("phonenr"),rs.getBoolean("admin"));
+	        	Globals.user = new User(rs.getString("phonenr"), rs.getString("password"), rs.getString("department"), rs.getBoolean("admin"));
 	        }
 	        con.close();
 	    }catch(SQLException e){

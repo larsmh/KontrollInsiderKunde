@@ -135,6 +135,28 @@ public class MainActivity extends ActionBarActivity {
          			Toast.LENGTH_LONG).show();
     		return;
     	}
+    	String title="Registrering av oppdrag";
+    	String message="Er du sikker på at du vil registrere dette oppdraget?";
+    	if(msgText.isShown()){
+    		title="Sending av avviksmelding";
+    		message="Er du sikker på at du vil sende avviksmeldingen?";
+    	}	
+    	new AlertDialog.Builder(this)
+    	.setTitle(title)
+        .setMessage(message)
+        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+        	public void onClick(DialogInterface dialog, int which) { 
+        		finishRegistration();
+        	}
+        })
+        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) { 
+                // do nothing
+            }
+        })
+        .show();
+    }
+    private void finishRegistration(){
     	//Setting customer to global var.
     	Calendar c = Calendar.getInstance();
     	date=c.get(Calendar.DATE)+"."+(c.get(Calendar.MONTH)+1)+"."+c.get(Calendar.YEAR)+" "
@@ -154,9 +176,7 @@ public class MainActivity extends ActionBarActivity {
     	msgText.setText("");
     	setMsgInvisible();
     	custSelect.setText("");
-
     }
-    
     
     
     private void updateList(){
@@ -227,6 +247,7 @@ public class MainActivity extends ActionBarActivity {
     	SharedPreferences userData = getSharedPreferences("UserFile", 0);
 		SharedPreferences.Editor editor = userData.edit();
 		editor.putString("phonenr", "null");
+		editor.putString("password", "null");
 		editor.putString("dept", "null");
 		editor.putBoolean("admin", false);
 		editor.commit();

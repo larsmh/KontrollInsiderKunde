@@ -18,42 +18,44 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class LoginActivity extends ActionBarActivity {
-	private Spinner dept;
 	private EditText phonenr;
+	private EditText password;
 	private DbAction db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		SharedPreferences userData = getSharedPreferences("UserFile", 0);
 		String phoneData = userData.getString("phonenr", "null");
+		String pwData = userData.getString("password", "null");
 		String deptData = userData.getString("dept", "null");
 		boolean adminData = userData.getBoolean("admin", false);
-		if(!phoneData.equals("null") && !deptData.equals("null")){
-			Globals.user = new User(phoneData, deptData, adminData);
+		if(!phoneData.equals("null") && !pwData.equals("null") && !deptData.equals("null")){
+			Globals.user = new User(phoneData, pwData, deptData, adminData);
 			nextActivity();
 		}
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		
-		String depts[] = {"Trondheim", "Oslo", "Bergen"};
+		/*String depts[] = {"Trondheim", "Oslo", "Bergen"};
 		dept = (Spinner) findViewById(R.id.dept);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, depts);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		dept.setAdapter(adapter);
+		dept.setAdapter(adapter);*/
 		
 		phonenr = (EditText) findViewById(R.id.phonenr);
+		password = (EditText) findViewById(R.id.password);
+		
 	}
 	public void loggin(View view){
 		String phoneInput=phonenr.getText().toString();
-		String deptInput=dept.getSelectedItem().toString();
-		Log.d("!!!!", phoneInput+" "+deptInput);
-		if(userExists(phoneInput)){
+		String pwInput=password.getText().toString();
+		if(userExists(phoneInput, pwInput)){
 			Globals.userFound=false;
-			Globals.user.setDepartment(deptInput);
 			SharedPreferences userData = getSharedPreferences("UserFile", 0);
 			SharedPreferences.Editor editor = userData.edit();
 			editor.putString("phonenr", Globals.user.getPhonenr());
+			editor.putString("password", Globals.user.getPassword());
 			editor.putString("dept", Globals.user.getDepartment());
 			editor.putBoolean("admin", Globals.user.getAdmin());
 			editor.commit();
@@ -66,11 +68,10 @@ public class LoginActivity extends ActionBarActivity {
 		}
 	}
 	private void nextActivity(){
-		//Globals.user = new User(phonenr, dept);
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 	}
-	private boolean userExists(String phonenr){
+	private boolean userExists(String phonenr, String password){
 		db = new DbAction();
 		db.retrieveUser(phonenr);
 		try {
@@ -79,7 +80,10 @@ public class LoginActivity extends ActionBarActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return Globals.userFound;
+		if(Globals.userFound){
+			return Globals.user.getPassword().equals(password);
+		}
+		return false;
 	}
 
 	@Override
@@ -100,7 +104,8 @@ public class LoginActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	@Override
-	public void onBackPressed() {
-	}
+    @Override
+    public void onBackPressed() {
+    	moveTaskToBack(true);
+    }
 }
