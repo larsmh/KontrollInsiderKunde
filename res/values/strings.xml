@@ -11,9 +11,24 @@
     <string name="sendMsg">Send avviksmelding</string>
     <string name="abort">Avbryt</string>
     <string name="message">Melding</string>
-    
+
     <color name="red">#F05149</color>
     <color name="grey">#9c9c9c</color>
     <color name="grey2">#DDDDDD</color>
+
+    <string name="title_activity_quality_report">QualityReportActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="quality_report_dialog">Velg kvalitetsrapport</string>
+    <string name="cancel">Avbryt</string>
+    <string name="ok">Ok</string>
+    <string-array name="quality_report_types">
+        <item>Barnehage</item>
+        <item>Butikk</item>
+        <item>Eiendomsdrift</item>
+        <item>Helsebygg</item>
+        <item>Næringsbygg</item>
+        <item>Standard</item>
+        
+    </string-array>
 
 </resources>

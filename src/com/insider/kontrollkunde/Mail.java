@@ -138,7 +138,7 @@ public class Mail extends javax.mail.Authenticator {
 
     return props; 
   } 
-
+  
   // the getters and setters 
   public String getBody() { 
     return _body; 

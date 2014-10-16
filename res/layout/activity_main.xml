@@ -41,6 +41,7 @@
         android:layout_below="@+id/regbutton"
         android:layout_marginTop="60dp"
         android:text="Kvalitetsrapport"
+        android:onClick="quality"
         android:textStyle="bold"
         android:visibility="gone" />
 

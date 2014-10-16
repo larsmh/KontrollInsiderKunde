@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import com.insider.kontrollkunde.model.Customer;
@@ -21,11 +22,9 @@ public class EmailPrep {
 	Customer cust;
 	Context context;
 	File myDir;
+	boolean attachement;
 	
-	public EmailPrep(ArrayList<Mail> list, Customer cust, String date, Context context) {
-	}
-	
-	public EmailPrep(ArrayList<Mail> list, Customer cust, String date, Context context, String msg) {
+	public EmailPrep(ArrayList<Mail> list, Customer cust, String date, Context context, String msg, boolean attachement) {
 		this.list = list;
 		this.date = date;
 		this.cust = cust;
@@ -76,7 +75,7 @@ public class EmailPrep {
 		}
 	}
 	
-	public void setEmailListContent(){
+	public void setEmailListContent() throws Exception{
 		String lines[] = {"","",""};
 		String line;
 		
@@ -102,11 +101,22 @@ public class EmailPrep {
 			
 //			Log.d("!!checkckck", "lol "+msg+" "+lines[0]+" "+lines[1]+" "+lines[2]);
 			
+			File dir = new File(Environment.getExternalStorageDirectory(), "insider_data");
+			File file = new File(dir.getAbsoluteFile()+"/"+cust.getEmail()+".pdf");
 			Mail mail = new Mail();
+			if(attachement == true) mail.addAttachment(file.getAbsolutePath());
+				
+				
 			String[] toArr = {lines[0]}; 
             mail.setTo(toArr); 
             mail.setFrom("franangthomas@gmail.com"); 
-            if(msg != ""){
+            
+            if(msg.equals("k")){
+            	mail.setSubject("Kvalitetsrapport fra Insider"); 
+            	mail.setBody("Vedlagt ligger kvalitetsrapport, som ble utført "+lines[1]);
+            }
+            
+            if(msg.length() > 2){
             	Log.d("!!checkckck", "lol "+msg+" "+lines[0]+" "+lines[1]+" "+lines[2]);
             	mail.setSubject("Vask ikke mulig på grunn av avvik");
             	mail.setBody(lines[2]+"\n"+
@@ -114,7 +124,9 @@ public class EmailPrep {
             			"Dette er mail number: "+f.getName()); 		
 				
             }
-            else {mail.setSubject("Kvittering for utført vask"); 
+            
+            if(msg == "") {
+            	mail.setSubject("Kvittering for utført vask"); 
             	mail.setBody("Vask utført av Kjekken Kjakansen\n"+
             			"Denne mailen ble sent: "+lines[1]+"\n"+
             			"Dette er mail number: "+f.getName());

@@ -45,6 +45,7 @@ public class MainActivity extends ActionBarActivity {
 	public ArrayList<Mail> emailList;
 	EmailPrep prepper;
 	Customer cust;
+	boolean attachement;
 	private String date, msg;
 	DbAction db;
 	
@@ -55,7 +56,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        emailList = new ArrayList<Mail>();
+        attachement = false;
+        emailList = Globals.emaiList;
         custSelect = (AutoCompleteTextView) findViewById(R.id.custselect);
         
         IntentFilter filter = new IntentFilter(Intent.ACTION_DEFAULT);
@@ -146,7 +148,12 @@ public class MainActivity extends ActionBarActivity {
         .setMessage(message)
         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
         	public void onClick(DialogInterface dialog, int which) { 
-        		finishRegistration();
+        		try {
+					finishRegistration();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
         	}
         })
         .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -156,11 +163,8 @@ public class MainActivity extends ActionBarActivity {
         })
         .show();
     }
-    private void finishRegistration(){
-    	//Setting customer to global var.
-    	Calendar c = Calendar.getInstance();
-    	date=c.get(Calendar.DATE)+"."+(c.get(Calendar.MONTH)+1)+"."+c.get(Calendar.YEAR)+" "
-    			+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
+    private void finishRegistration() throws Exception{
+    	
     	//Sending email
     	String msg="";
     	if(msgText.isShown()){
@@ -172,7 +176,8 @@ public class MainActivity extends ActionBarActivity {
     	db.registerJob(cust.getName(), date);
     	}
     	
-    	sendEmail(cust, date, msg);
+    	EmailGenerator gen = new EmailGenerator(this,cust,date,msg,emailList,attachement);
+    	gen.sendEmail();
     	msgText.setText("");
     	setMsgInvisible();
     	custSelect.setText("");
@@ -261,15 +266,20 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void onReceive(Context context, Intent intent) { 
         	
-        	 EmailPrep prepper = new EmailPrep(emailList, cust, date, context, msg);
+        	 EmailPrep prepper = new EmailPrep(emailList, cust, date, context, msg,attachement);
         	 ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
              if (connec != null && 
                  (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
                  (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)){ 
              	
-            	 	prepper.setEmailListContent();
+            	 	try {
+						prepper.setEmailListContent();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
              	
-            	 	new SendEmailTask().execute();
+            	 	new SendEmailTask(emailList).execute();
                 
             	if(emailList.size() > 0)
             		Toast.makeText(getApplicationContext(), "Email sendt!", Toast.LENGTH_SHORT).show();
@@ -282,66 +292,12 @@ public class MainActivity extends ActionBarActivity {
       }; 
     
     
-    public void sendEmail(Customer cust, String date, String msg ){
-    	Log.d("!!inne i sendEmail",msg);
-    	
-    	EmailPrep prepper = new EmailPrep(emailList, cust, date, this.getBaseContext(), msg);
-    	prepper.createLocalEmail();
-    	prepper.printNumberOfFiles();
-
-    	
-        ConnectivityManager connec = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connec != null && 
-            (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED) || 
-            (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)){ 
-        	
-        	prepper.setEmailListContent();
-        	
-        	Log.d("Lum", "Number of emails in list: "+emailList.size());
-				
-        	new SendEmailTask().execute();
-            
-        	Toast.makeText(getApplicationContext(), "Email sendt!", Toast.LENGTH_SHORT).show();
-        	
-        	
-        	
-        } else if (connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED ||
-                 connec.getNetworkInfo(1).getState() == NetworkInfo.State.DISCONNECTED ) {            
-                //Not connected.    
-        	Log.d("Lum", "Number of emails in list: "+emailList.size());
-        		
-                Toast.makeText(getApplicationContext(), "Ingen tilgang til internett.", Toast.LENGTH_LONG).show();
-        }
-//        prepper.deleteAllFiles();
-    }
     
-    //Class to make a background thread sending the email.
-    class SendEmailTask extends AsyncTask<Void, Void, Void>{
+    public void quality(View v){
+    	cust = getCustomer(custSelect.getText().toString());
     	
-		@Override
-		protected Void doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-		
-			try {
-				for (int i = 0; i < emailList.size(); i++) {
-					
-	            	emailList.get(i).send();
-	            	
-				}
-	        	
-	        	for (int i = 0; i < emailList.size(); i++) {
-					
-	        		emailList.remove(i);
-	            	
-				}
-				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			return null;
-		}
+    	QualityDialog qualityDialog = new QualityDialog(cust,emailList);
+		qualityDialog.show(getSupportFragmentManager(), "Quality Report");
+
     }
 }
