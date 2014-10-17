@@ -30,17 +30,17 @@ public class EmailPrep {
 		this.cust = cust;
 		this.context = context;
 		this.msg = msg;
+		this.attachement = attachement;
 		myDir = context.getDir("myDir", Context.MODE_PRIVATE);
-		Log.d("!!emailPrep", ""+msg);
+		Log.d("!!emailPrep", ""+attachement);
+		
 	}
 	
 	public void createLocalEmail(){
 
 		String email = cust.getEmail();
-//    	String email = "badeanda87@hotmail.com";
     	String name = cust.getName();
     	String[] s = {email, date, msg};
-//    	String name = "thomas";
     	File file;    	
 		
     	Log.d("!!inne i CreateLocalEamil", "lol "+msg+" "+s[0]+" "+s[1]+" "+s[2]);
@@ -104,7 +104,10 @@ public class EmailPrep {
 			File dir = new File(Environment.getExternalStorageDirectory(), "insider_data");
 			File file = new File(dir.getAbsoluteFile()+"/"+cust.getEmail()+".pdf");
 			Mail mail = new Mail();
-			if(attachement == true) mail.addAttachment(file.getAbsolutePath());
+			if(attachement == true){
+				Log.d("!!emailPrep right before add", ""+attachement);
+				mail.addAttachment(file.getAbsolutePath());
+			}
 				
 				
 			String[] toArr = {lines[0]}; 

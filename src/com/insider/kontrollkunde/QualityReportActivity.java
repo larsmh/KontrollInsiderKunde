@@ -47,7 +47,7 @@ public class QualityReportActivity extends ActionBarActivity {
 	Customer cust;
 	ArrayList<Mail> emailList;
 	int code;
-	boolean attachement;
+	boolean attachement = true;
 	private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 	private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
 	private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
