@@ -31,4 +31,9 @@
         
     </string-array>
 
+    <string-array name = "standard_quality_report_types">
+        <item>Standard kvalitetsrapport</item>
+        <item>Oppstartsrapport</item>
+    </string-array>
+    
 </resources>
