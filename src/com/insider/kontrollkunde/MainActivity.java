@@ -133,15 +133,15 @@ public class MainActivity extends ActionBarActivity {
     	cust = getCustomer(custSelect.getText().toString());
     	if(cust==null){
     		Toast.makeText(getApplicationContext(), 
-    				"Ingen gyldig kunde valgt. Velg kunde på nytt!",
+    				"Ingen gyldig kunde valgt. Velg kunde pï¿½ nytt!",
          			Toast.LENGTH_LONG).show();
     		return;
     	}
     	String title="Registrering av oppdrag";
-    	String message="Er du sikker på at du vil registrere dette oppdraget?";
+    	String message="Er du sikker pï¿½ at du vil registrere dette oppdraget?";
     	if(msgText.isShown()){
     		title="Sending av avviksmelding";
-    		message="Er du sikker på at du vil sende avviksmeldingen?";
+    		message="Er du sikker pï¿½ at du vil sende avviksmeldingen?";
     	}	
     	new AlertDialog.Builder(this)
     	.setTitle(title)
@@ -223,7 +223,7 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_log_out) {
         	new AlertDialog.Builder(this)
         	.setTitle("Utlogging")
-            .setMessage("Er du sikker på at du vil logge ut?")
+            .setMessage("Er du sikker pï¿½ at du vil logge ut?")
             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             	public void onClick(DialogInterface dialog, int which) { 
             		logout();
@@ -290,8 +290,6 @@ public class MainActivity extends ActionBarActivity {
         	
         }
       }; 
-    
-    
     
     public void quality(View v){
     	cust = getCustomer(custSelect.getText().toString());

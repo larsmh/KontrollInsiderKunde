@@ -31,11 +31,15 @@ public class QualityDialog extends DialogFragment{
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					
+					Log.d("!!", "which = "+which);
 			    	Intent intent = new Intent(getActivity(), QualityReportActivity.class);
 			    	intent.putExtra("choice", ""+which);
 			    	intent.putExtra("customerObject", cust);
 			    	startActivity(intent);
+			    	
+			    	if(which == 5){
+			    		new standardQualityReportDialog();
+			    	}
 				}
 			});
 	      
@@ -47,6 +51,33 @@ public class QualityDialog extends DialogFragment{
 	        // Create the AlertDialog object and return it
 	        return builder.create();
 	  }
-	  
 	 
+	  public class standardQualityReportDialog  extends DialogFragment{
+		  
+		  public Dialog onCreateDialog(Bundle savedInstanceState){
+			
+			  AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		      builder.setItems(R.array.standard_quality_report_types, new DialogInterface.OnClickListener() {
+			  
+		    	  @Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+		    		  	if(which == 0) which = 6;
+		    		  	else which = 7;
+		    		  
+				    	Intent intent = new Intent(getActivity(), QualityReportActivity.class);
+				    	intent.putExtra("choice", ""+which);
+				    	intent.putExtra("customerObject", cust);
+				    	startActivity(intent);
+				    	
+				    	
+					}
+				});
+		    	  
+		    	  
+			  return builder.create();
+			  
+		  }
+		  
+	  }
 }
